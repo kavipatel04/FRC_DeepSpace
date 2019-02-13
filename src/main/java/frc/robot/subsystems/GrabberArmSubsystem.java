@@ -8,7 +8,6 @@
 package frc.robot.subsystems;
 
 import frc.robot.Robot;
-//import frc.robot.RobotMap;
 import frc.robot.RobotMap.MapKeys;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -19,9 +18,8 @@ public class GrabberArmSubsystem extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
   private DoubleSolenoid m_grabberArm;
-  final int  PCM_ARMCANID = Robot.m_map.getId(MapKeys.PCM_ARMCANID);
   public GrabberArmSubsystem() {
-    m_grabberArm = new DoubleSolenoid(
+      m_grabberArm = new DoubleSolenoid(
       Robot.m_map.getId(MapKeys.PCM_ARMCANID),
       Robot.m_map.getId(MapKeys.SOLENOID_ARMFORWARD),
       Robot.m_map.getId(MapKeys.SOLENOID_ARMREVERSE)
@@ -30,6 +28,7 @@ public class GrabberArmSubsystem extends Subsystem {
       m_grabberArm.set(DoubleSolenoid.Value.kOff);
     }
   }
+  
 
    public void armTurnOff() {
      if (m_grabberArm != null) {
@@ -42,7 +41,9 @@ public class GrabberArmSubsystem extends Subsystem {
     }
   }
   public void armRetract() {
-    m_grabberArm.set(DoubleSolenoid.Value.kReverse);
+    if (m_grabberArm != null) {
+      m_grabberArm.set(DoubleSolenoid.Value.kReverse);
+    }
   }
 
   @Override

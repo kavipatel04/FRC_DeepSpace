@@ -24,9 +24,9 @@ public class startDescendCommand extends Command {
   protected void initialize() {
     Robot.m_climbSubsystem.startDescend();
     setTimeout(Robot.m_climbSubsystem.getTimeLeft());
-    Robot.m_climbSubsystem.setauxDrive();
-    Robot.m_drivetrain.update(Robot.m_climbSubsystem.getMainDrive(), 0);
-    //TODO-MR Robot.DriveTrain.update(Robot.m_climbSubsystem.getMainDrive());
+    
+    
+    
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -34,14 +34,12 @@ public class startDescendCommand extends Command {
   protected void execute() {
     Robot.m_drivetrain.update(Robot.m_climbSubsystem.getMainDrive(), 0);
     Robot.m_climbSubsystem.setauxDrive();
-    Robot.m_ledSubsystem.climbDescend();
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
     return isTimedOut();
-    //return !Robot.m_climbSubsystem.m_autoDescend;
   }
 
   // Called once after isFinished returns true

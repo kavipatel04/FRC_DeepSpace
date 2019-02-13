@@ -25,9 +25,6 @@ public class DriveCommand extends Command {
   @Override
   protected void execute() {
     Robot.m_drivetrain.update(Robot.m_oi.getForwardValue(), Robot.m_oi.getTurnValue());
-    Robot.m_ledSubsystem.DriveLeft();
-    Robot.m_ledSubsystem.DriveRight();
-
   }
 
   // Make this return true when this Command no longer needs to run execute()

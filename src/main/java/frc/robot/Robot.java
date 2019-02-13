@@ -8,17 +8,15 @@
 package frc.robot;
 
 
-//import edu.wpi.first.wpilibj.PowerDistributionPanel;
-import edu.wpi.cscore.UsbCamera;
-import edu.wpi.cscore.VideoMode.PixelFormat;
-import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.SlideSubsystem;
 
-import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 /*
 	
@@ -38,6 +36,7 @@ import frc.robot.subsystems.LedSubsystem;
 public class Robot extends TimedRobot {
   public static OI m_oi;
   public static RobotMap m_map = new RobotMap();
+  public static PowerDistributionPanel m_pdp = new PowerDistributionPanel();
   public static LedSubsystem m_ledSubsystem = new LedSubsystem();
   public static ClimbSubsystem m_climbSubsystem = new ClimbSubsystem();
   public static GrabberHandSubsystem m_grabberHand = new GrabberHandSubsystem();
@@ -47,8 +46,9 @@ public class Robot extends TimedRobot {
   public static SlideSubsystem m_slide = new SlideSubsystem();
   
 
-  Command m_autonomousCommand;
+ Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
+
 
   /**
    * This function is run when the robot is first started up and should be
@@ -56,13 +56,12 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
-    camera.setVideoMode(PixelFormat.kMJPEG, 640, 480, 15);
     m_oi = new OI();
-    m_chooser.setDefaultOption("Default Auto", new GrabberOff()); 
+    m_climbSubsystem.initialize();
+    // m_chooser.setDefaultOption("Default Auto", new GrabberOff()); 
     // chooser.addOption("My Auto", new MyAutoCommand());
-    SmartDashboard.putData("Auto mode", m_chooser);
-    Robot.m_ledSubsystem.LED(true);  
+    SmartDashboard.putData(Scheduler.getInstance());
+
 
 
   }

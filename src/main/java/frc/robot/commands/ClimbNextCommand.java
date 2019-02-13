@@ -23,15 +23,16 @@ public class ClimbNextCommand extends Command {
   protected void initialize() {
     Robot.m_climbSubsystem.nextStage();
     setTimeout(Robot.m_climbSubsystem.getTimeLeft());
-    Robot.m_climbSubsystem.setauxDrive();
-    Robot.m_drivetrain.update(Robot.m_climbSubsystem.getMainDrive(), 0);
+    
+    
   }
 
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    
+    Robot.m_drivetrain.update(Robot.m_climbSubsystem.getMainDrive(), 0);
+    Robot.m_climbSubsystem.setauxDrive();
 
   
   }
