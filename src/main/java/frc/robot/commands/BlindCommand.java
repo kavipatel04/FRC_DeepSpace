@@ -6,14 +6,14 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot.commands;
-import frc.robot.Robot;
-import edu.wpi.first.wpilibj.command.Command;
 
-public class DriveCommand extends Command {
-  public DriveCommand() {
+import edu.wpi.first.wpilibj.command.Command;
+import frc.robot.Robot;
+
+public class BlindCommand extends Command {
+  public BlindCommand() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
-    requires(Robot.m_drivetrain);
   }
 
   // Called just before this Command runs the first time
@@ -24,10 +24,7 @@ public class DriveCommand extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.m_drivetrain.update(Robot.m_oi.getForwardValue(), Robot.m_oi.getTurnValue());
-    Robot.m_ledSubsystem.DriveLeft();
-    Robot.m_ledSubsystem.DriveRight();
-    System.out.println(Robot.m_drivetrain.m_frontleft.getMotorOutputVoltage());
+    Robot.m_ledSubsystem.blindCommand(true);
   }
 
   // Make this return true when this Command no longer needs to run execute()

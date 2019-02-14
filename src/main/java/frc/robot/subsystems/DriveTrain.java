@@ -44,15 +44,15 @@ public class DriveTrain extends Subsystem {
   private static final double MAX_TURN_RATE_DEG_PER_SEC = 15;
   private static final double RAD_PER_DEG = Math.PI/180;
 
-  private double m_p_right = Robot.m_map.pidDriveRight("p");
-  private double m_i_right = Robot.m_map.pidDriveRight("i");
-  private double m_d_right = Robot.m_map.pidDriveRight("d");
-  private double m_f_right = Robot.m_map.pidDriveRight("f");
+  private double m_p_right = 1.0;//Robot.m_map.pidDriveRight("p");
+  private double m_i_right = 0;//Robot.m_map.pidDriveRight("i");
+  private double m_d_right = 0;//Robot.m_map.pidDriveRight("d");
+  private double m_f_right = 0;//Robot.m_map.pidDriveRight("f");
 
-  private double m_p_left = Robot.m_map.pidDriveLeft("p");
-  private double m_i_left = Robot.m_map.pidDriveLeft("i");
-  private double m_d_left = Robot.m_map.pidDriveLeft("d");
-  private double m_f_left = Robot.m_map.pidDriveLeft("f");
+  private double m_p_left = 1.0;//Robot.m_map.pidDriveLeft("p");
+  private double m_i_left = 0;//Robot.m_map.pidDriveLeft("i");
+  private double m_d_left = 0;//Robot.m_map.pidDriveLeft("d");
+  private double m_f_left = 0;//Robot.m_map.pidDriveLeft("f");
 
 
 
@@ -106,7 +106,7 @@ public class DriveTrain extends Subsystem {
 
     m_rightSpeed = (m_velocity_fps + m_velocity_turn_rps) * REVOLUTIONSPERFOOT * COUNTSPERREVOLUTION * SECONDSPER100MILLISECONDS; //TO-DO: Something wrong with the forwardAndTurn value (outputting -2)
     m_leftSpeed = (m_velocity_fps - m_velocity_turn_rps) *  REVOLUTIONSPERFOOT * COUNTSPERREVOLUTION * SECONDSPER100MILLISECONDS;
-    System.out.printf("ForwardJoy: %f TurnJoy: %f", y, z);
+    //System.out.printf("ForwardJoy: %f TurnJoy: %f", y, z);
   }
 
   @Override
@@ -114,7 +114,7 @@ public class DriveTrain extends Subsystem {
     //m_frontleft.set(ControlMode.Velocity, m_leftSpeed);
     //m_frontright.set(ControlMode.Velocity, m_rightSpeed);
 
-    System.out.printf("ForwardVal: %f TurnVal: %f forwardAndTurn: %f Conversion: %f Left: %f Right: %f\n", m_velocity_fps, m_velocity_turn_rps, (m_velocity_fps - m_velocity_turn_rps),  REVOLUTIONSPERFOOT * COUNTSPERREVOLUTION * SECONDSPER100MILLISECONDS, m_leftSpeed, m_rightSpeed);
+    //System.out.printf("ForwardVal: %f TurnVal: %f forwardAndTurn: %f Conversion: %f Left: %f Right: %f\n", m_velocity_fps, m_velocity_turn_rps, (m_velocity_fps - m_velocity_turn_rps),  REVOLUTIONSPERFOOT * COUNTSPERREVOLUTION * SECONDSPER100MILLISECONDS, m_leftSpeed, m_rightSpeed);
 
     m_frontleft.set(ControlMode.Velocity, -m_leftSpeed);
     m_frontright.set(ControlMode.Velocity, m_rightSpeed);

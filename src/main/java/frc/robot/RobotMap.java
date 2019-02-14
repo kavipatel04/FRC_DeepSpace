@@ -177,7 +177,7 @@ public class RobotMap {
       return albert.get(key);
     }
   }
-  
+  /*
   public double pidSlideMotor(String x) {
     if (x.toLowerCase() == "p") {
       return prefs.getDouble("P Slide Motor", 0.0);
@@ -232,7 +232,7 @@ public class RobotMap {
       System.out.println("Valid PIDF letter not entered");
       return 0.0;
     }
-  }
+  }*/ 
 
   /** public void pidPrefMethod() {
     prefs.putDouble("P Slide Motor", pidSlideMotor("p"));

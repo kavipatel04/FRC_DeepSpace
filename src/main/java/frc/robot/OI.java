@@ -53,12 +53,14 @@ public class OI{
   private final int MIDHATCH_BUTTON = 3;
   private final int LOWHATCH_BUTTON = 1;
   private final int CLAMP_BUTTON = 2;
+  private final int BLIND = 6;
 
   public JoystickButton yButton2 = new JoystickButton(joy2, HIGHHATCH_BUTTON);
   public JoystickButton xButton2 = new JoystickButton(joy2, MIDHATCH_BUTTON);
   public JoystickButton aButton2 = new JoystickButton(joy2, LOWHATCH_BUTTON);
   public JoystickButton bButton2 = new JoystickButton(joy2, CLAMP_BUTTON);
-
+  public JoystickButton leftBumper2 = new JoystickButton(joy2, BLIND);
+  
   public double turnModifier = .4;
   public double driveModifier = .9;
 
@@ -73,6 +75,7 @@ public class OI{
 
     leftBumper1.whenPressed(new ClimbPrevCommand());
     rightBumper1.whenPressed(new ClimbNextCommand());
+    leftBumper2.toggleWhenPressed(new BlindCommand());
 
     yButton2.whenPressed(new LiftHighCommand()); //move lift to high hatch position
     xButton2.whenPressed(new LiftMidCommand()); //move lift to mid hatch position
