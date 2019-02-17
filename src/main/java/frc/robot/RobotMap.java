@@ -85,18 +85,18 @@ public class RobotMap {
 
     // ALBERT IDs BEGIN HERE #########################################
 
-    albert.put(MapKeys.DRIVE_FRONTLEFT, 20);
+    albert.put(MapKeys.DRIVE_FRONTLEFT, 12);
     albert.put(MapKeys.DRIVE_FRONTRIGHT, 11);
-    albert.put(MapKeys.DRIVE_BACKLEFT, 21);
+    albert.put(MapKeys.DRIVE_BACKLEFT, 9);
     albert.put(MapKeys.DRIVE_BACKRIGHT, 10);
 
     albert.put(MapKeys.BACKLEFTCLIMBWHEEL, 2);
     albert.put(MapKeys.BACKRIGHTCLIMBWHEEL, 3);
 
-    albert.put(MapKeys.SLIDE, 3);
+    albert.put(MapKeys.SLIDE, 4);
     
-    albert.put(MapKeys.LIFT_LEFT, 0);
-    albert.put(MapKeys.LIFT_RIGHT, 0);
+    albert.put(MapKeys.LIFT_LEFT, 1);
+    albert.put(MapKeys.LIFT_RIGHT, 8);
 
     albert.put(MapKeys.PCM_CLIMBCANID, 0);
     albert.put(MapKeys.SOLENOID_FRONTLEFTEXTEND, 0);
