@@ -45,7 +45,7 @@ public class Robot extends TimedRobot {
   public static OI m_oi;
   public static RobotMap m_map = new RobotMap();
   public static PowerDistributionPanel m_pdp = new PowerDistributionPanel();
-  public static PressureSensor m_pressursensor = new PressureSensor(0);
+  public static PressureSensor m_pressuresensor = new PressureSensor(0);
   public static LedSubsystem m_ledSubsystem = new LedSubsystem();
   public static ClimbSubsystem m_climbSubsystem = new ClimbSubsystem();
   public static GrabberHandSubsystem m_grabberHand = new GrabberHandSubsystem();
@@ -107,7 +107,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    SmartDashboard.putNumber("PSI", Robot.m_pressursensor.getAirPressurePsi());
+    SmartDashboard.putNumber("PSI", Robot.m_pressuresensor.getAirPressurePsi());
     Robot.m_ledSubsystem.blindCommand();
   }
 

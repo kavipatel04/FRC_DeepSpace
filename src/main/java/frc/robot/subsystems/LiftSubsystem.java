@@ -23,8 +23,8 @@ public class LiftSubsystem extends Subsystem {
   private double m_speed_ips; //inches per second
   private double m_position_in; //desired position in inches
   private double m_position_counts; 
-  private static final double MAXSPEED = 20.0; //inches per second
-  private static final double AUTOLIFTSPEED = 20.0; //inches per second
+  private static final double MAXSPEED = 20.0; //inches per second //TODO-CHANGE Change to 40 inches/second
+  private static final double AUTOLIFTSPEED = 20.0; //inches per second //TODO-CHANGE Change to 40 inches/second
   private static final double SECONDS_PER_TICK = .02; // seconds per encoder tic
   private static final double COUNTS_PER_INCH = 1366; // encoder counts per inch (formerly 150)
   private static final int TALON_TIMEOUT_MS = 1000; 
@@ -67,7 +67,7 @@ public class LiftSubsystem extends Subsystem {
     m_i = prefs.getDouble("Lift_I_Value", 0.0);
     m_d = prefs.getDouble("Lift_D_Value", 10.0);
 
-    HIGH_POS_IN = prefs.getDouble("Lift_High_Pos", 57.0);
+    HIGH_POS_IN = prefs.getDouble("Lift_High_Pos", 57.0); //TODO_CHECK Check if Dashboard value is zero
     MID_POS_IN = prefs.getDouble("Lift_Mid_Pos", 26.0);
     LOW_POS_IN = prefs.getDouble("Lift_Low_Pos", 0.0);
     

@@ -3,6 +3,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.*;
 import java.lang.Math;
 
@@ -69,12 +70,14 @@ public class OI {
   private final int LOWHATCH_BUTTON = 7;
   private final int CLAMP_BUTTON = 4;
   private final int BLIND = 6;
+  private final int PRESUPDATE = 1;
   public JoystickButton yButton2 = new JoystickButton(joy2, ARM_BUTTON);
   public JoystickButton xButton2 = new JoystickButton(joy2, HIGHHATCH_BUTTON);
   public JoystickButton startButton2 = new JoystickButton(joy2, MIDHATCH_BUTTON);
   public JoystickButton backButton2 = new JoystickButton(joy2, LOWHATCH_BUTTON);
   public JoystickButton bButton2 = new JoystickButton(joy2, CLAMP_BUTTON);
   public JoystickButton leftBumper2 = new JoystickButton(joy2, BLIND);
+  public JoystickButton aButton2 = new JoystickButton(joy2, PRESUPDATE);
  
 
 
@@ -95,14 +98,16 @@ public class OI {
     
     yButton2.whenPressed(new PneumaticArmExtend()); //Press for arm extend
     yButton2.whenReleased(new PneumaticArmRetract()); //release for arm retract
-
+    
     xButton2.whenPressed(new LiftHighCommand()); //move lift to mid hatch position
+    //TODO-ADD Systemout.println(xButton2.whenPressed);
     startButton2.whenPressed(new LiftMidCommand()); //move hatch to 
     backButton2.whenPressed(new LiftLowCommand()); //move lift to low hatch position
     
     bButton2.whenPressed(new PneumaticExtendCommand()); //press for clamp
     bButton2.whenReleased(new PneumaticRetractCommand()); //release for clamp
 
+    aButton2.whenPressed(new PressureUpdateCommand());
     
     
 

@@ -10,30 +10,27 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 
-public class LiftHighCommand extends Command {
-  private static final double HIGH_POS_IN = Robot.m_lift.HIGH_POS_IN; //inches
-  public LiftHighCommand() {
+public class PressureUpdateCommand extends Command {
+  public PressureUpdateCommand() {
     // Use requires() here to declare subsystem dependencies
-    requires(Robot.m_lift);
+    // eg. requires(chassis);
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    Robot.m_lift.startAutoMove(HIGH_POS_IN);
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.m_ledSubsystem.LiftHigh(); 
-    //TODO-ADD Systemout.println("lifthigh");
+    Robot.m_pressuresensor.getAirPressurePsi();
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return Robot.m_lift.autoMoveFinished(); //TO-DO: why doesnt this return true as soonn as initialize is run?
+    return false;
   }
 
   // Called once after isFinished returns true

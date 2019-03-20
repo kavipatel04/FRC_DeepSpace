@@ -750,7 +750,7 @@ public void grabberHand(){
   }
 }
 public void blindCommand(){
-  if(Robot.m_pressursensor.getAirPressurePsi() < 65) {
+  if(Robot.m_pressuresensor.getAirPressurePsi() < 65) {
     m_pixel[1].set((byte)255, (byte)255, (byte)255);
     m_pixel[2].set((byte)255, (byte)255, (byte)255);    //BRG
     m_pixel[3].set((byte)255, (byte)255, (byte)255);
