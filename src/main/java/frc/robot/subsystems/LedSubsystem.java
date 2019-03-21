@@ -68,15 +68,15 @@ public class LedSubsystem extends Subsystem {
     }
 
     // Init SPI port
-    m_spi = new SPI(SPI.Port.kOnboardCS0);
-    m_spi.setClockRate(256000);
-    m_spi.setClockActiveLow();
-    m_spi.setChipSelectActiveLow();
-    m_spi.setSampleDataOnRising();
-    m_spi.setMSBFirst();
+    ///m_spi = new SPI(SPI.Port.kOnboardCS0);
+    ///m_spi.setClockRate(256000);
+    ///m_spi.setClockActiveLow();
+    ///m_spi.setChipSelectActiveLow();
+    ///m_spi.setSampleDataOnRising();
+    ///m_spi.setMSBFirst();
 
     blank();
-    updateLeds();
+    ///updateLeds();
   }
 
   @Override
@@ -116,14 +116,14 @@ public class LedSubsystem extends Subsystem {
       cursor += 1;
       if (cursor == MAX_SPI_WRITE) {
         // we have a full write buff, send it now.
-        m_spi.write(m_writeBuf, cursor);
+        ///m_spi.write(m_writeBuf, cursor);
         cursor = 0;
       }
     }
 
     // now write the last part, if any
     if (cursor > 0) {
-      m_spi.write(m_writeBuf, cursor);
+      ///m_spi.write(m_writeBuf, cursor);
       cursor = 0;
     }
   }

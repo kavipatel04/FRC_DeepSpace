@@ -17,6 +17,7 @@ import frc.robot.RobotMap.MapKeys;
 import java.util.EnumMap;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.kauailabs.navx.frc.AHRS;
 
 
 
@@ -74,7 +75,15 @@ public class ClimbSubsystem extends Subsystem {
   private double m_DriveTime;
 
   private int m_tickcounter;
-  
+
+  private float m_roll;
+  private float m_pitch;
+  private boolean m_rp_initialized = false;
+
+  private float m_pitch0;
+  private float m_roll0;
+
+   
   
 
 
@@ -132,17 +141,36 @@ public class ClimbSubsystem extends Subsystem {
     m_LEDBlueValue = 0;
     m_LEDGreenValue = 0;
 
+    
     }
 
   public void initialize() {
 
     //TODO-CALCULATE VELOCITY
     m_velocity = 28.24; //Inches per Second
-
+    readNavX();
     initActuators();
     setActuators();
   }
-  public void initActuators(){
+
+  public void zeroNavX(){
+    m_pitch0 = m_pitch;
+    m_roll0 = m_roll;
+  }
+
+  private void readNavX() {
+    m_pitch = -Robot.m_ahrs.getPitch();
+    m_roll = -Robot.m_ahrs.getRoll();
+    if (!m_rp_initialized){
+      m_rp_initialized = true;
+      zeroNavX();
+    }
+    m_pitch -= m_pitch0;
+    m_roll -= m_roll0;
+    //System.out.printf("Roll,Pitch = %f, %f\n", m_roll, m_pitch);
+  }
+
+  public void initActuators() {
     int frontLeftClimbCanID = Robot.m_map.getId(MapKeys.FRONTLEFTCLIMBWHEEL);
     int frontRightClimbCanID = Robot.m_map.getId(MapKeys.FRONTRIGHTCLIMBWHEEL);
     if ((frontLeftClimbCanID != 0) && (frontRightClimbCanID != 0)){
@@ -284,12 +312,30 @@ public class ClimbSubsystem extends Subsystem {
 
   @Override 
   public void periodic() {
-    
+    readNavX();
 
     if (m_climbState == ClimbState.CLIMB_L3_S1B) {
       Preferences prefs = Preferences.getInstance();
+      
+      double pitchThresh = prefs.getDouble("Climb_L3_S1B_Pitch", 5.0);
 
-      int onTime = prefs.getInt("Climb_L3_S1B_onTime", 10);
+      boolean frontExtend = true;
+      boolean rearExtend = true;
+
+      if (m_pitch > pitchThresh){
+        //Pitched too far forward
+        rearExtend = false; //Pitched too far forward
+        System.out.println("Stopped Rear");
+      } 
+      if (m_pitch < -pitchThresh){
+        //Pitched too far backward
+        frontExtend = false;
+        System.out.println("Stopped Front");
+      } 
+
+      ascendBack(rearExtend);
+      ascendFront(frontExtend);
+      /* int onTime = prefs.getInt("Climb_L3_S1B_onTime", 10);
       int offTime = prefs.getInt("Climb_L3_S1B_offTime", 0);
 
       if ((m_tickcounter % (onTime + offTime)) < offTime) {
@@ -301,11 +347,11 @@ public class ClimbSubsystem extends Subsystem {
         ascendFront(true);
       }
 
-      m_tickcounter += 1;
+      m_tickcounter += 1; */
 
     }
     
-
+    
   }
 
   private void setActuators() {
@@ -673,6 +719,9 @@ public class ClimbSubsystem extends Subsystem {
   }
 
   public void setauxDrive() {
+    if (!m_configured) {
+      return;
+    }
     climbwheels.set(m_auxDrive);
   }
   
