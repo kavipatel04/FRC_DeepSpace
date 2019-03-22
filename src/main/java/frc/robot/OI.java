@@ -93,7 +93,7 @@ public class OI {
     
     backButton1.whenPressed(new DescendCommandGroup()); //initiate lvl 2 descent
     startButton1.whenPressed(new L2AscendCommandGroup()); //initiate lvl 2 climb
-    xButton1.whenPressed(new L3AscendCommandGroup()); // intiate lvl 3 climb
+    xButton1.whenPressed(new startL3AscendCommand()); // intiate lvl 3 climb
     
     leftBumper2.whenPressed(new BlindCommand());
     

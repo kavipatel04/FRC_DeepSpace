@@ -116,6 +116,8 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     SmartDashboard.putNumber("PSI", Robot.m_pressursensor.getAirPressurePsi());
+    SmartDashboard.putNumber("Pitch", Robot.m_climbSubsystem.m_pitch);
+    SmartDashboard.putNumber("Roll", Robot.m_climbSubsystem.m_roll);
    // Robot.m_ledSubsystem.blindCommand();
    
    

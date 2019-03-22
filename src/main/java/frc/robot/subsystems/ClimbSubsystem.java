@@ -76,8 +76,8 @@ public class ClimbSubsystem extends Subsystem {
 
   private int m_tickcounter;
 
-  private float m_roll;
-  private float m_pitch;
+  public float m_roll;
+  public float m_pitch;
   private boolean m_rp_initialized = false;
 
   private float m_pitch0;
@@ -154,8 +154,8 @@ public class ClimbSubsystem extends Subsystem {
   }
 
   public void zeroNavX(){
-    m_pitch0 = m_pitch;
-    m_roll0 = m_roll;
+    //Pitch and roll will be zeroed next time read NavX is called
+    m_rp_initialized = false; 
   }
 
   private void readNavX() {
@@ -163,7 +163,8 @@ public class ClimbSubsystem extends Subsystem {
     m_roll = -Robot.m_ahrs.getRoll();
     if (!m_rp_initialized){
       m_rp_initialized = true;
-      zeroNavX();
+      m_pitch0 = m_pitch;
+      m_roll0 = m_roll;
     }
     m_pitch -= m_pitch0;
     m_roll -= m_roll0;
@@ -316,23 +317,46 @@ public class ClimbSubsystem extends Subsystem {
 
     if (m_climbState == ClimbState.CLIMB_L3_S1B) {
       Preferences prefs = Preferences.getInstance();
-      
-      double pitchThresh = prefs.getDouble("Climb_L3_S1B_Pitch", 5.0);
+
+      int onTimeBack = prefs.getInt("Climb_L3_S1B_onTimeBack", 2);
+      int offTimeBack = prefs.getInt("Climb_L3_S1B_offTimeBack", 2);
+      int onTime = prefs.getInt("Climb_L3_S1B_onTime", 2);
+      int offTime = prefs.getInt("Climb_L3_S1B_offTime", 2);
+
+      double pitchThreshPos = prefs.getDouble("Climb_L3_S1B_PitchPos", 5.0);
+      double pitchThreshNeg = prefs.getDouble("Climb_L3_S1B_PitchNeg", -5.0);
 
       boolean frontExtend = true;
       boolean rearExtend = true;
 
-      if (m_pitch > pitchThresh){
+      if (m_pitch > pitchThreshPos){
         //Pitched too far forward
-        rearExtend = false; //Pitched too far forward
-        System.out.println("Stopped Rear");
+        if ((m_tickcounter % (onTimeBack + offTimeBack)) < offTimeBack) {
+          //Drive Front Pistons Down for Off Time
+          rearExtend = false;
+          System.out.println("Stopped Rear");
+        }
+        else{
+          //Drive Front Pistons Up for On Time
+          rearExtend = true;
+          System.out.println("Started Rear");
+        }
       } 
-      if (m_pitch < -pitchThresh){
+      if (m_pitch < pitchThreshNeg){
         //Pitched too far backward
-        frontExtend = false;
-        System.out.println("Stopped Front");
+        if ((m_tickcounter % (onTime + offTime)) < offTime) {
+          //Drive Front Pistons Down for Off Time
+          frontExtend = false;
+          System.out.println("Stopped Front");
+        }
+        else{
+          //Drive Front Pistons Up for On Time
+          frontExtend = true;
+          System.out.println("Started Front");
+        }
+        
       } 
-
+      m_tickcounter += 1;
       ascendBack(rearExtend);
       ascendFront(frontExtend);
       /* int onTime = prefs.getInt("Climb_L3_S1B_onTime", 10);
