@@ -7,8 +7,8 @@
 
 package frc.robot;
 
-
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -20,6 +20,8 @@ import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.LedSubsystem;
 
 import edu.wpi.first.cameraserver.CameraServer;
+
+import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.cscore.VideoSink;
@@ -53,6 +55,7 @@ public class Robot extends TimedRobot {
   public static DriveTrain m_drivetrain = new DriveTrain();
   public static LiftSubsystem m_lift = new LiftSubsystem();
   public static SlideSubsystem m_slide = new SlideSubsystem();
+  public static AHRS m_ahrs;
 
   
 
@@ -73,6 +76,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     m_oi = new OI();
+    m_ahrs = new AHRS(SPI.Port.kMXP);
     m_drivetrain.initialize();
     m_climbSubsystem.initialize();
     m_lift.initialize();
@@ -96,6 +100,9 @@ public class Robot extends TimedRobot {
 
     m_ledSubsystem.LED(true);
 
+    
+
+
   }
 
   /**
@@ -109,7 +116,11 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     SmartDashboard.putNumber("PSI", Robot.m_pressursensor.getAirPressurePsi());
+    SmartDashboard.putNumber("Pitch", Robot.m_climbSubsystem.m_pitch);
+    SmartDashboard.putNumber("Roll", Robot.m_climbSubsystem.m_roll);
    // Robot.m_ledSubsystem.blindCommand();
+   
+   
   }
 
   /**
@@ -142,6 +153,7 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     m_autonomousCommand = m_chooser.getSelected();
     m_autonomousCommand = null;
+    Robot.m_climbSubsystem.zeroNavX();
 
     /*
      * String autoSelected = SmartDashboard.getString("Auto Selector",
