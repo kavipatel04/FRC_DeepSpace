@@ -71,8 +71,8 @@ public class RobotMap {
     briefcase.put(MapKeys.FRONTRIGHTCLIMBWHEEL, 0);
 
     briefcase.put(MapKeys.SLIDE, 0);
-    briefcase.put(MapKeys.LIFT_LEFT, 8);
-    briefcase.put(MapKeys.LIFT_RIGHT, 4);
+    briefcase.put(MapKeys.LIFT_LEFT, 4); ///was 8
+    briefcase.put(MapKeys.LIFT_RIGHT, 8); ///change to 4
 
     briefcase.put(MapKeys.PCM_CLIMBCANID, 0);
     briefcase.put(MapKeys.SOLENOID_FRONTEXTEND, 0);
@@ -281,7 +281,7 @@ public class RobotMap {
 
 
 
-  public RobotTypes activeRobot = RobotTypes.AIRLOCK;
+  public RobotTypes activeRobot = RobotTypes.BRIEFCASE;
 
   public int getId(MapKeys key) {
     System.out.printf("In Get ID. %s\n", key.toString());

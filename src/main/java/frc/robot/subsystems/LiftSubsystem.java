@@ -26,7 +26,7 @@ public class LiftSubsystem extends Subsystem {
   private static final double MAXSPEED = 40.0; //inches per second
   private static final double AUTOLIFTDOWN = 45.0; //inches per second
   private static final double AUTOLIFTSPEED = 45.0; //inches per second
-  private static final double SECONDS_PER_TICK = .02; // seconds per encoder tic
+  private static final double SECONDS_PER_TICK = 0.02; // seconds per encoder tic
   private static final double COUNTS_PER_INCH = -1366; // encoder counts per inch (formerly 150)
   private static final int TALON_TIMEOUT_MS = 1000; 
   private static final double DISTANCE_PER_TICK = AUTOLIFTSPEED * SECONDS_PER_TICK; // inches travelled per encoder tick
@@ -40,6 +40,16 @@ public class LiftSubsystem extends Subsystem {
 
   private boolean m_autoActive; //is auto active?
   private double m_autoDistance; //distance to travel autonomously
+  private double m_autoSpeed_ips = 0;
+  
+  //Acceleration
+  private static final double AUTO_ACCEL_IPS2 = 200.0;
+  private static final double MAX_VEL_IPS = 100.0;
+  private static final double AUTO_MIN_SPEED = 1.0; //inches per second
+  private static final double AUTO_MIN_DIST = 1.0; //inches
+  
+
+
 
   public double HIGH_POS_IN;
   public double MID_POS_IN;  
@@ -111,7 +121,7 @@ public class LiftSubsystem extends Subsystem {
 
     m_motorup1.selectProfileSlot(0, 0);
     m_motorup1.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, TALON_TIMEOUT_MS);
-    m_motorup1.setSensorPhase(false);
+    m_motorup1.setSensorPhase(false); 
 
     m_motorup1.config_kP(0, m_p, TALON_TIMEOUT_MS);
     m_motorup1.config_kI(0, m_i, TALON_TIMEOUT_MS);
@@ -150,23 +160,79 @@ public class LiftSubsystem extends Subsystem {
 
   @Override
   public void periodic() {
-    //if auto is active, do second if loop, if not, revert to manual position
-    if(m_autoActive) {
+    
 
+    //if auto is active, do second if loop, if not, revert to manual position
+    //if(m_autoActive) {
+      /*
       if (Math.abs(m_autoDistance) < Math.abs(DISTANCE_PER_TICK)) { //if there is only a small distance left to travel, finishes auto move
         m_position_in += m_autoDistance;
         m_autoDistance = 0;
         m_autoActive = false;
       }else{
-        if (m_autoDistance > 0) {
+        if (m_autoDistance > 0) {  //going up
           m_position_in += DISTANCE_PER_TICK;
           m_autoDistance -= DISTANCE_PER_TICK;
-        } else if (m_autoDistance < 0) {
+          ///NEW STUFF
+        distance = m_autoDistance;
+        velocity = 
+          up = true;
+        } else if (m_autoDistance < 0) {  //going down
           m_position_in -= DISTANCE_PER_TICK_DOWN;
           m_autoDistance += DISTANCE_PER_TICK_DOWN;
+          up = false;
         }
         
+      }*/
+      ///NEW STUFF
+    if(m_autoActive) {
+      double d = m_autoDistance;
+      double v = m_autoSpeed_ips;
+      double a = AUTO_ACCEL_IPS2;
+      boolean up = true;
+      
+      if (d < 0) {
+        //moving backwards (down)
+        d = -d;
+        v = -v;
+        up = false;
       }
+      
+      double t = Math.sqrt((2.0 * d) / a);
+      double speed_limit = a*(t- SECONDS_PER_TICK);
+      
+      if ((v >= speed_limit) || (v > AUTOLIFTSPEED)){
+        v -= a*SECONDS_PER_TICK;
+      } else if (((v + a*SECONDS_PER_TICK) < speed_limit) && 
+                 ((v + a*SECONDS_PER_TICK) < AUTOLIFTSPEED))
+      {
+        v += a * SECONDS_PER_TICK;
+      } else {
+        v = v;
+      }
+
+      double dx = v * SECONDS_PER_TICK;
+
+      if (up){
+        m_autoDistance -= dx;
+        m_position_in += dx;
+        m_autoSpeed_ips = v;
+      } else{
+        m_autoDistance += dx;
+        m_position_in -= dx;
+        m_autoSpeed_ips = -v;
+      }
+
+      System.out.printf("POS: %5.2f Speed:%5.2f\n", m_position_in, m_autoSpeed_ips);
+
+
+      //check for end condition
+      if((Math.abs(m_autoSpeed_ips) < AUTO_MIN_SPEED) && 
+      (Math.abs(m_autoDistance) < AUTO_MIN_DIST)){
+        m_autoDistance = 0.0;
+        m_autoActive = false;
+      } 
+
     } else {
       m_position_in += m_speed_ips * SECONDS_PER_TICK;
     }
@@ -176,6 +242,8 @@ public class LiftSubsystem extends Subsystem {
       m_motorup1.set(ControlMode.Position, m_position_counts);
       //System.out.println(m_position_counts);
     }
+
+    
 
   }
 public void startAutoMove(double position_in) {
@@ -187,6 +255,7 @@ public void startAutoMove(double position_in) {
     //activate auto lift
     m_autoActive = true;
     m_autoDistance = position_in - m_position_in; //sets auto distance to travel to the desired - current desired distance
+    m_autoSpeed_ips = m_speed_ips;
     System.out.printf("Moving to %f\n", position_in);
   }
 }
